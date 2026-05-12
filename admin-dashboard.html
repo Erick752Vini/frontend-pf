@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Windspeed Racing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #06080f;
+            --bg-card: #0f1424;
+            --primary-blue: #007bff;
+            --primary-pink: #ff2e88;
+            --gradient-main: linear-gradient(90deg, #007bff, #8a2be2, #ff2e88);
+            --text-light: #ffffff;
+            --text-muted: #9aa4b2;
+            --font-main: 'Montserrat', sans-serif;
+            --color-success: #00e676;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background: var(--bg-card);
+            border-bottom: 3px solid;
+            border-image: var(--gradient-main) 1;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar-logo {
+            font-size: 1.2rem;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+        }
+
+        .topbar-logo span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .admin-badge {
+            font-size: 0.75rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .btn-logout {
+            background: transparent;
+            border: 1px solid var(--primary-pink);
+            color: var(--primary-pink);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .btn-logout:hover {
+            background: var(--primary-pink);
+            color: white;
+        }
+
+        /* CONTEÚDO */
+        .container {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+        }
+
+        /* KPI */
+        .kpi-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .kpi {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 20px 25px;
+            flex: 1;
+            min-width: 150px;
+            border-top: 3px solid var(--primary-blue);
+        }
+
+        .kpi-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-top: 5px;
+        }
+
+        /* TABELA */
+        .card {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 25px;
+            border-top: 3px solid var(--primary-pink);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+
+        .btn-refresh {
+            background: var(--gradient-main);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            padding: 10px 15px;
+            text-align: left;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        td {
+            padding: 14px 15px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .badge-login {
+            background: rgba(0, 230, 118, 0.15);
+            border: 1px solid var(--color-success);
+            color: var(--color-success);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .never {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .loading-row {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="topbar-logo">Windspeed <span>RACING</span></div>
+        <div class="topbar-right">
+            <span class="admin-badge">⚙ Admin: <span id="admin-nome">—</span></span>
+            <button class="btn-logout" onclick="logout()">Sair</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Painel Administrativo</h1>
+        <p class="subtitle">Gerencie os membros registrados na plataforma</p>
+
+        <div class="kpi-row">
+            <div class="kpi">
+                <div class="kpi-label">Total de Usuários</div>
+                <div class="kpi-value" id="kpi-total">—</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Já Fizeram Login</div>
+                <div class="kpi-value" id="kpi-logados">—</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Nunca Logaram</div>
+                <div class="kpi-value" id="kpi-nunca">—</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>👥 Usuários Registrados</h2>
+                <button class="btn-refresh" onclick="carregarUsuarios()">↻ Atualizar</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Último Login</th>
+                        <th>Total Logins</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-usuarios">
+                    <tr>
+                        <td colspan="5" class="loading-row">Carregando...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        const admin = JSON.parse(localStorage.getItem('usuario') || '{}');
+
+        // Proteção: redireciona se não estiver logado como admin
+        if (!token) window.location.href = 'login.html';
+
+        document.getElementById('admin-nome').textContent = admin.nome || 'Admin';
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('usuario');
+            window.location.href = 'login.html';
+        }
+
+        function formatarData(dateStr) {
+            if (!dateStr) return '<span class="never">Nunca</span>';
+            const d = new Date(dateStr);
+            return d.toLocaleString('pt-BR');
+        }
+
+        async function carregarUsuarios() {
+            const tbody = document.getElementById('tabela-usuarios');
+            tbody.innerHTML = '<tr><td colspan="5" class="loading-row">Carregando...</td></tr>';
+
+            try {
+                const res = await fetch('http://localhost:3000/usuarios', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const usuarios = await res.json();
+
+                // ─── Filtra o próprio admin da lista ───
+                const lista = usuarios.filter(u => u.id !== admin.id);
+
+                // KPIs
+                const logados = lista.filter(u => u.ultimo_login).length;
+                document.getElementById('kpi-total').textContent = lista.length;
+                document.getElementById('kpi-logados').textContent = logados;
+                document.getElementById('kpi-nunca').textContent = lista.length - logados;
+
+                // Tabela
+                if (lista.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="loading-row">Nenhum usuário encontrado.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = lista.map((u, i) => `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${u.nome}</td>
+                        <td>${u.email}</td>
+                        <td>${formatarData(u.ultimo_login)}</td>
+                        <td>${u.total_logins > 0 ? `<span class="badge-login">${u.total_logins}x</span>` : '<span class="never">0</span>'}</td>
+                    </tr>
+                `).join('');
+
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="5" class="loading-row">Erro ao conectar ao servidor.</td></tr>';
+            }
+        }
+
+        carregarUsuarios();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso | Windspeed Racing</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,500;0,700;0,900;1,900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #06080f;
+            --bg-card: #0f1424;
+            --primary-blue: #007bff;
+            --primary-purple: #8a2be2;
+            --primary-pink: #ff2e88;
+            --gradient-main: linear-gradient(90deg, #007bff, #8a2be2, #ff2e88);
+            --text-light: #ffffff;
+            --text-muted: #9aa4b2;
+            --font-main: 'Montserrat', sans-serif;
+            --transition-fast: 0.3s ease;
+            --color-success: #00e676;
+            --color-error: #ff4d6d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-light);
+            line-height: 1.6;
+            background: linear-gradient(rgba(6, 8, 15, 0.85), rgba(6, 8, 15, 0.95)),
+                url('https://via.placeholder.com/1920x1080/0a0f1f/8a2be2?text=F1+Paddock') center/cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary-pink);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            transition: var(--transition-fast);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .auth-title {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            color: var(--text-light);
+            font-family: var(--font-main);
+            transition: var(--transition-fast);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-pink);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(255, 46, 136, 0.2);
+        }
+
+        .btn-cta {
+            display: block;
+            width: 100%;
+            background: var(--gradient-main);
+            color: var(--text-light);
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            margin-top: 10px;
+            font-family: var(--font-main);
+        }
+
+        .btn-cta:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-cta:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .auth-switch a {
+            color: var(--primary-blue);
+            font-weight: 700;
+            transition: var(--transition-fast);
+        }
+
+        .auth-switch a:hover {
+            color: var(--primary-pink);
+        }
+
+        /* ── FEEDBACK DE MENSAGEM ── */
+        .auth-message {
+            display: none;
+            padding: 10px 14px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .auth-message.success {
+            display: block;
+            background: rgba(0, 230, 118, 0.15);
+            border: 1px solid var(--color-success);
+            color: var(--color-success);
+        }
+
+        .auth-message.error {
+            display: block;
+            background: rgba(255, 77, 109, 0.15);
+            border: 1px solid var(--color-error);
+            color: var(--color-error);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="auth-wrapper">
+
+        <!-- ═══ TELA DE LOGIN ═══ -->
+        <div class="auth-card" id="login-box">
+            <div class="logo">
+                <a href="#">Windspeed <span>RACING</span></a>
+            </div>
+            <h2 class="auth-title">Acesso ao Paddock</h2>
+
+            <div class="auth-message" id="login-message"></div>
+
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" class="form-control" id="login-email" placeholder="piloto@windspeed.com" required>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" class="form-control" id="login-senha" placeholder="••••••••" required>
+            </div>
+            <button class="btn-cta" id="btn-login">Entrar</button>
+
+            <p class="auth-switch">Novo na equipe? <a href="#" id="show-register">Registre-se</a></p>
+        </div>
+
+        <!-- ═══ TELA DE REGISTRO ═══ -->
+        <div class="auth-card hidden" id="register-box">
+            <div class="logo">
+                <a href="#">Windspeed <span>RACING</span></a>
+            </div>
+            <h2 class="auth-title">Novo Membro</h2>
+
+            <div class="auth-message" id="register-message"></div>
+
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" class="form-control" id="register-nome" placeholder="Ex: Ayrton Senna" required>
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" class="form-control" id="register-email" placeholder="piloto@windspeed.com"
+                    required>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" class="form-control" id="register-senha" placeholder="••••••••" required>
+            </div>
+            <button class="btn-cta" id="btn-register">Criar Conta</button>
+
+            <p class="auth-switch">Já faz parte da equipe? <a href="#" id="show-login">Faça Login</a></p>
+        </div>
+
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/usuarios';
+
+        // ─── UTILITÁRIOS ─────────────────────────────────────────────────────
+        function showMessage(elementId, text, type) {
+            const el = document.getElementById(elementId);
+            el.textContent = text;
+            el.className = `auth-message ${type}`; // 'success' ou 'error'
+        }
+
+        function setLoading(btn, loading) {
+            btn.disabled = loading;
+            btn.textContent = loading ? 'Aguarde...' : btn.dataset.label;
+        }
+
+        // ─── ALTERNAR TELAS ───────────────────────────────────────────────────
+        const loginBox = document.getElementById('login-box');
+        const registerBox = document.getElementById('register-box');
+
+        document.getElementById('show-register').addEventListener('click', (e) => {
+            e.preventDefault();
+            loginBox.classList.add('hidden');
+            registerBox.classList.remove('hidden');
+        });
+
+        document.getElementById('show-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            registerBox.classList.add('hidden');
+            loginBox.classList.remove('hidden');
+        });
+
+        // ─── LOGIN ────────────────────────────────────────────────────────────
+        const btnLogin = document.getElementById('btn-login');
+        btnLogin.dataset.label = 'Entrar';
+
+        btnLogin.addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value.trim();
+            const senha = document.getElementById('login-senha').value;
+
+            if (!email || !senha) {
+                showMessage('login-message', 'Preencha e-mail e senha.', 'error');
+                return;
+            }
+
+            setLoading(btnLogin, true);
+
+            try {
+                const res = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    // Servidor retornou erro (401, 400, 500...)
+                    showMessage('login-message', data.error || 'Erro ao fazer login.', 'error');
+                    return;
+                }
+
+                // ✅ Login bem-sucedido: salva o token e redireciona
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('usuario', JSON.stringify(data.user));
+
+                showMessage('login-message', 'Login realizado! Redirecionando...', 'success');
+                setTimeout(() => {
+                    if (data.user.role === 'admin') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                }, 1000);
+
+            } catch (err) {
+                showMessage('login-message', 'Não foi possível conectar ao servidor.', 'error');
+            } finally {
+                setLoading(btnLogin, false);
+            }
+        });
+
+        // ─── REGISTRO ─────────────────────────────────────────────────────────
+        const btnRegister = document.getElementById('btn-register');
+        btnRegister.dataset.label = 'Criar Conta';
+
+        btnRegister.addEventListener('click', async () => {
+            const nome = document.getElementById('register-nome').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const senha = document.getElementById('register-senha').value;
+
+            if (!nome || !email || !senha) {
+                showMessage('register-message', 'Preencha todos os campos.', 'error');
+                return;
+            }
+
+            if (senha.length < 6) {
+                showMessage('register-message', 'A senha deve ter pelo menos 6 caracteres.', 'error');
+                return;
+            }
+
+            setLoading(btnRegister, true);
+
+            try {
+                const res = await fetch(`${API_URL}/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, email, senha })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showMessage('register-message', data.error || 'Erro ao criar conta.', 'error');
+                    return;
+                }
+
+                // ✅ Cadastro bem-sucedido: vai para tela de login
+                showMessage('register-message', 'Conta criada! Faça seu login.', 'success');
+                setTimeout(() => {
+                    registerBox.classList.add('hidden');
+                    loginBox.classList.remove('hidden');
+                    showMessage('login-message', 'Conta criada com sucesso! Entre agora.', 'success');
+                }, 1500);
+
+            } catch (err) {
+                showMessage('register-message', 'Não foi possível conectar ao servidor.', 'error');
+            } finally {
+                setLoading(btnRegister, false);
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
